@@ -1,22 +1,25 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import { prisma } from "./config/db.js";
+import errorHandler from "./middleware/errorHandler.middleware.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(errorHandler);
 
-app.get("/", async (req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.json({ message: "Supabase connected 🚀", users });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
+import transactionRoutes from "./routes/transaction.routes.js";
 
-app.listen(8080, () => {
-  console.log("server is started");
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/dashboard", dashboardRoutes);
+app.use("/transactions", transactionRoutes);
+
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`server is started ${PORT}`);
 });
