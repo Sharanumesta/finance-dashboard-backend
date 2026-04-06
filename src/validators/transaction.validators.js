@@ -1,17 +1,23 @@
 import { body, query, param } from "express-validator";
 
-const createTransactionValidator = [
+export const createTransactionValidator = [
   body("amount")
     .isFloat({ gt: 0 })
     .withMessage("Amount must be a positive number"),
+
   body("type")
     .isIn(["INCOME", "EXPENSE"])
     .withMessage("Type must be INCOME or EXPENSE"),
+
   body("category")
     .trim()
     .isLength({ min: 1, max: 100 })
     .withMessage("Category is required (max 100 chars)"),
-  body("date").isISO8601().withMessage("Date must be a valid ISO 8601 date"),
+
+  body("date")
+    .isISO8601()
+    .withMessage("Date must be a valid ISO 8601 date"),
+
   body("notes")
     .optional()
     .trim()
@@ -19,25 +25,30 @@ const createTransactionValidator = [
     .withMessage("Notes must be under 500 characters"),
 ];
 
-const updateTransactionValidator = [
+export const updateTransactionValidator = [
   param("id").isUUID().withMessage("Invalid transaction ID"),
+
   body("amount")
     .optional()
     .isFloat({ gt: 0 })
     .withMessage("Amount must be a positive number"),
+
   body("type")
     .optional()
     .isIn(["INCOME", "EXPENSE"])
     .withMessage("Type must be INCOME or EXPENSE"),
+
   body("category")
     .optional()
     .trim()
     .isLength({ min: 1, max: 100 })
     .withMessage("Category must be 1–100 characters"),
+
   body("date")
     .optional()
     .isISO8601()
-    .withMessage("Date must be a valid ISO 8601 date"),
+    .withMessage("Date must be valid"),
+
   body("notes")
     .optional()
     .trim()
@@ -45,40 +56,45 @@ const updateTransactionValidator = [
     .withMessage("Notes must be under 500 characters"),
 ];
 
-const listTransactionValidator = [
+export const listTransactionValidator = [
   query("page")
     .optional()
     .isInt({ min: 1 })
-    .withMessage("Page must be a positive integer"),
+    .withMessage("Page must be positive"),
+
   query("limit")
     .optional()
     .isInt({ min: 1, max: 100 })
     .withMessage("Limit must be 1–100"),
+
   query("type")
     .optional()
     .isIn(["INCOME", "EXPENSE"])
-    .withMessage("Type must be INCOME or EXPENSE"),
+    .withMessage("Invalid type"),
+
   query("category").optional().trim(),
+
   query("startDate")
     .optional()
     .isISO8601()
-    .withMessage("startDate must be ISO 8601"),
+    .withMessage("Invalid startDate"),
+
   query("endDate")
     .optional()
     .isISO8601()
-    .withMessage("endDate must be ISO 8601"),
+    .withMessage("Invalid endDate"),
+
   query("sortBy")
     .optional()
     .isIn(["date", "amount", "createdAt"])
-    .withMessage("sortBy must be date, amount, or createdAt"),
+    .withMessage("Invalid sortBy"),
+
   query("sortOrder")
     .optional()
     .isIn(["asc", "desc"])
-    .withMessage("sortOrder must be asc or desc"),
+    .withMessage("Invalid sortOrder"),
 ];
 
-export {
-  createTransactionValidator,
-  updateTransactionValidator,
-  listTransactionValidator,
-};
+export const idParamValidator = [
+  param("id").isUUID().withMessage("Invalid transaction ID"),
+];

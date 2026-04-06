@@ -13,36 +13,84 @@ import {
   adminOnly,
 } from "../middleware/auth.middleware.js";
 
+import {
+  createTransactionValidator,
+  updateTransactionValidator,
+  listTransactionValidator,
+  idParamValidator
+} from "../validators/transaction.validators.js";
+
+import { validate } from "../middleware/validate.middleware.js";
+
 const router = express.Router();
 
 /**
  * GET all transactions
- * - Viewer & Analyst → only their own
- * - Admin → all or filter by userId
+ * - Analyst & Admin only
+ * - Supports filters, pagination, sorting
  */
-router.get("/", authenticate, listTransactions);
+router.get(
+  "/",
+  authenticate,
+  analystOrAdmin,
+  listTransactionValidator,
+  validate,
+  listTransactions
+);
 
 /**
  * GET single transaction
+ * - Analyst & Admin only
  */
-router.get("/:id", authenticate, getTransactionById);
+router.get(
+  "/:id",
+  authenticate,
+  analystOrAdmin,
+  idParamValidator,
+  validate,
+  getTransactionById
+);
 
 /**
  * CREATE transaction
- * - All authenticated users can create
+ * - Admin only
+ * - Validates amount, type, category, date, notes
  */
-router.post("/", authenticate, createTransaction);
+router.post(
+  "/",
+  authenticate,
+  adminOnly,
+  createTransactionValidator,
+  validate,
+  createTransaction
+);
 
 /**
  * UPDATE transaction
- * - Owner or Admin
+ * - Admin only
+ * - Supports partial updates
  */
-router.patch("/:id", authenticate, updateTransaction);
+router.patch(
+  "/:id",
+  authenticate,
+  adminOnly,
+  updateTransactionValidator,
+  validate,
+  updateTransaction
+);
 
 /**
- * DELETE transaction (soft delete)
- * - Owner or Admin
+ * DELETE transaction
+ * - Admin only
+ * - Soft delete (isDeleted = true)
  */
-router.delete("/:id", authenticate, deleteTransaction);
+router.delete(
+  "/:id",
+  authenticate,
+  adminOnly,
+  idParamValidator,
+  validate,
+  deleteTransaction
+);
 
 export default router;

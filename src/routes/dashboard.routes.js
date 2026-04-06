@@ -1,13 +1,14 @@
 import express from "express";
 import * as dashboardController from "../controllers/dashboard.controller.js";
-import { authenticate, analystOrAdmin } from "../middleware/auth.middleware.js";
+import { authenticate, anyRole } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/summary", authenticate, analystOrAdmin, dashboardController.getSummary);
-router.get("/categories", authenticate, analystOrAdmin, dashboardController.getCategoryBreakdown);
-router.get("/monthly", authenticate, analystOrAdmin, dashboardController.getMonthlyTrends);
-router.get("/weekly", authenticate, analystOrAdmin, dashboardController.getWeeklyTrends);
-router.get("/recent", authenticate, analystOrAdmin, dashboardController.getRecentActivity);
+
+router.get("/summary", authenticate, anyRole, dashboardController.getSummary);
+router.get("/categories", authenticate, anyRole, dashboardController.getCategoryBreakdown);
+router.get("/monthly", authenticate, anyRole, dashboardController.getMonthlyTrends);
+router.get("/weekly", authenticate, anyRole, dashboardController.getWeeklyTrends);
+router.get("/recent", authenticate, anyRole, dashboardController.getRecentActivity);
 
 export default router;
