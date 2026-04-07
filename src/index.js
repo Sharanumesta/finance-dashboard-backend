@@ -11,8 +11,8 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use(express.json());
-app.use(errorHandler);
 
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
@@ -28,7 +28,13 @@ app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/transactions", transactionRoutes);
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-  console.log(`server is started ${PORT}`);
-});
+app.use(errorHandler);
+
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`server is started ${PORT}`);
+  });
+}
+
+export default app;
