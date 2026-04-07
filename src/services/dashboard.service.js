@@ -5,7 +5,7 @@ import { prisma } from "../config/db.js";
  */
 const buildWhere = (user) => ({
   isDeleted: false,
-  ...(user.role !== "ADMIN" && { userId: user.id }),
+  ...(user.role !== "ADMIN"),
 });
 
 /**

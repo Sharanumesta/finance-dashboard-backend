@@ -3,7 +3,7 @@ import { prisma } from "../config/db.js";
 /**
  * Build a Prisma where clause from query filters.
  */
-const buildWhere = ({ type, category, startDate, endDate, userId } = {}) => {
+const buildWhere = ({ type, category, startDate, endDate } = {}) => {
   const where = { isDeleted: false };
 
   if (type) where.type = type;
@@ -15,7 +15,7 @@ const buildWhere = ({ type, category, startDate, endDate, userId } = {}) => {
     };
   }
 
-  if (userId) where.userId = userId;
+  // if (userId) where.userId = userId;
 
   if (startDate || endDate) {
     where.date = {};
