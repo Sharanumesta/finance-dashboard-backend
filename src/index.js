@@ -5,7 +5,12 @@ import errorHandler from "./middleware/errorHandler.middleware.js";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(errorHandler);
 
@@ -14,10 +19,14 @@ import userRoutes from "./routes/user.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import transactionRoutes from "./routes/transaction.routes.js";
 
-app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
-app.use("/dashboard", dashboardRoutes);
-app.use("/transactions", transactionRoutes);
+app.get("/", (req, res) => {
+  res.send("API working 🚀");
+});
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
