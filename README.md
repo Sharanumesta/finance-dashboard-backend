@@ -290,16 +290,16 @@ All demo accounts use password: **`Password123!`**
 
 ```bash
 # Login
-curl -X POST http://localhost:3000/auth/login \
+curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@finance.com","password":"Password123!"}'
 
 # Get dashboard summary
-curl http://localhost:3000/dashboard/summary \
+curl http://localhost:8080/dashboard/summary \
   -H "Authorization: Bearer <your_token>"
 
 # Create transaction (Admin only)
-curl -X POST http://localhost:3000/transactions \
+curl -X POST http://localhost:8080/transactions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <your_token>" \
   -d '{"amount":5000,"type":"INCOME","category":"Salary","date":"2026-04-01"}'
